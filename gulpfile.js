@@ -1,11 +1,10 @@
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var sourcemaps = require('gulp-sourcemaps');
 var minify = require('gulp-minify');
 var browserify = require('browserify');
 
-gulp.task('build', function() {
+function build() {
   var b = browserify({
     entries: './src/AudioKeys.js',
     debug: false,
@@ -16,9 +15,9 @@ gulp.task('build', function() {
     .pipe(source('audiokeys.js'))
     .pipe(buffer())
     .pipe(gulp.dest('./dist/'));
-});
+};
 
-gulp.task('minify', function() {
+function minifyBuild() {
   var b = browserify({
     entries: './src/AudioKeys.js',
     debug: false,
@@ -36,6 +35,6 @@ gulp.task('minify', function() {
     }))
     .pipe(gulp.dest('./dist/'));
   ;
-});
+};
 
-gulp.task('default', ['build', 'minify']);
+exports.default = gulp.parallel(build, minifyBuild);

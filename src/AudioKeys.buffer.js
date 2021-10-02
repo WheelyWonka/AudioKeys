@@ -68,7 +68,8 @@ module.exports = {
       keyCode: keyCode,
       note: self._map(keyCode),
       frequency: self._toFrequency( self._map(keyCode) ),
-      velocity: self._state.velocity
+      velocity: self._state.velocity,
+      octave: self._state.octave
     };
   },
 

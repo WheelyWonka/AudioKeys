@@ -30,6 +30,8 @@ AudioKeys.prototype.get = state.get;
 // events
 AudioKeys.prototype.down = events.down;
 AudioKeys.prototype.up = events.up;
+AudioKeys.prototype.octaveChanged = events.octaveChanged;
+AudioKeys.prototype.velocityChanged = events.velocityChanged;
 AudioKeys.prototype._trigger = events._trigger;
 AudioKeys.prototype._bind = events._bind;
 

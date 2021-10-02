@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.AudioKeys = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.AudioKeys = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 // ================================================================
 // KEY BUFFER
 // ================================================================
@@ -69,7 +69,8 @@ module.exports = {
       keyCode: keyCode,
       note: self._map(keyCode),
       frequency: self._toFrequency( self._map(keyCode) ),
-      velocity: self._state.velocity
+      velocity: self._state.velocity,
+      octave: self._state.octave
     };
   },
 
@@ -189,6 +190,20 @@ module.exports = {
     self._listeners.up = (self._listeners.up || []).concat(fn);
   },
 
+  octaveChanged: function(fn) {
+    var self = this;
+
+    // add the function to our list of listeners
+    self._listeners.octaveChanged = (self._listeners.octaveChanged || []).concat(fn);
+  },
+
+  velocityChanged: function(fn) {
+    var self = this;
+    
+    // add the function to our list of listeners
+    self._listeners.velocityChanged = (self._listeners.velocityChanged || []).concat(fn);
+  },
+
   _trigger: function(action /* args */) {
     var self = this;
 
@@ -267,6 +282,8 @@ AudioKeys.prototype.get = state.get;
 // events
 AudioKeys.prototype.down = events.down;
 AudioKeys.prototype.up = events.up;
+AudioKeys.prototype.octaveChanged = events.octaveChanged;
+AudioKeys.prototype.velocityChanged = events.velocityChanged;
 AudioKeys.prototype._trigger = events._trigger;
 AudioKeys.prototype._bind = events._bind;
 
@@ -513,9 +530,11 @@ module.exports = {
     if(self._specialKeyMap[keyCode].type === 'octave' && self._state.octaveControls) {
       // shift the state of the `octave`
       self._state.octave += self._specialKeyMap[keyCode].value;
+      self._trigger('octaveChanged', self._state.octave);
     } else if(self._specialKeyMap[keyCode].type === 'velocity' && self._state.velocityControls) {
       // set the `velocity` to a new value
       self._state.velocity = self._specialKeyMap[keyCode].value;
+      self._trigger('velocityChanged', self._state.velocity);
     }
   },
 

@@ -10,9 +10,11 @@ module.exports = {
     if(self._specialKeyMap[keyCode].type === 'octave' && self._state.octaveControls) {
       // shift the state of the `octave`
       self._state.octave += self._specialKeyMap[keyCode].value;
+      self._trigger('octaveChanged', self._state.octave);
     } else if(self._specialKeyMap[keyCode].type === 'velocity' && self._state.velocityControls) {
       // set the `velocity` to a new value
       self._state.velocity = self._specialKeyMap[keyCode].value;
+      self._trigger('velocityChanged', self._state.velocity);
     }
   },
 

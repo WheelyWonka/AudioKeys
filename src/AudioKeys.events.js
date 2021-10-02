@@ -21,6 +21,20 @@ module.exports = {
     self._listeners.up = (self._listeners.up || []).concat(fn);
   },
 
+  octaveChanged: function(fn) {
+    var self = this;
+
+    // add the function to our list of listeners
+    self._listeners.octaveChanged = (self._listeners.octaveChanged || []).concat(fn);
+  },
+
+  velocityChanged: function(fn) {
+    var self = this;
+    
+    // add the function to our list of listeners
+    self._listeners.velocityChanged = (self._listeners.velocityChanged || []).concat(fn);
+  },
+
   _trigger: function(action /* args */) {
     var self = this;
 
